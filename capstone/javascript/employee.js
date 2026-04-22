@@ -270,6 +270,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 // Delete Employee function  
+// =============================================
+// [ADDED] DELETE EMPLOYEE FUNCTION
+// Search: "deleteEmployee" or "DELETE EMPLOYEE FUNCTION"
 async function deleteEmployee(employeeId, emp) {
     const confirmed = confirm(`Are you sure you want to delete ${emp.employeeFirstName} ${emp.employeeLastName}?`);
     if (!confirmed) return;
@@ -286,12 +289,8 @@ async function deleteEmployee(employeeId, emp) {
 
         if (!res.ok) throw new Error("Failed to delete employee");
 
-        // Close dialog
         window.employeeDialog.close();
-
-        // Reload the table
         loadIntoTable("http://localhost:8081/api/employee", document.querySelector(".emp-table"), currentPage);
-
         alert("Employee deleted successfully!");
 
     } catch (err) {
