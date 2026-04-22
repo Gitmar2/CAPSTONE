@@ -146,6 +146,11 @@ async function openEmployeeDetails(emp) {
     const rateDisplay = emp.employeeEmploymentType === "REGULAR" ? emp.monthlySalary : emp.employeeRate;
     document.getElementById("emp-rate").textContent = rateDisplay || "0";
 
+    // Set up delete button naka link sa employee-details.html button id="dialog-button-delete"
+    const deleteDialogBtn = document.getElementById("dialog-button-delete");
+    deleteDialogBtn.onclick = () => deleteEmployee(emp.employeeId, emp);
+    // =============================================
+
     window.employeeDialog.showModal();
 }
 
@@ -263,3 +268,35 @@ document.addEventListener("DOMContentLoaded", async () => {
     loadDialog();  // wait for dialog to laod
     loadIntoTable("http://localhost:8081/api/employee", document.querySelector(".emp-table"),0);
 });
+
+// Delete Employee function  
+async function deleteEmployee(employeeId, emp) {
+    const confirmed = confirm(`Are you sure you want to delete ${emp.employeeFirstName} ${emp.employeeLastName}?`);
+    if (!confirmed) return;
+
+    try {
+        const token = localStorage.getItem("jwtToken");
+
+        const res = await fetch(`http://localhost:8081/api/employee/${employeeId}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        if (!res.ok) throw new Error("Failed to delete employee");
+
+        // Close dialog
+        window.employeeDialog.close();
+
+        // Reload the table
+        loadIntoTable("http://localhost:8081/api/employee", document.querySelector(".emp-table"), currentPage);
+
+        alert("Employee deleted successfully!");
+
+    } catch (err) {
+        console.error(err);
+        alert("Error deleting employee: " + err.message);
+    }
+}
+// =============================================

@@ -2,7 +2,7 @@
 async function fetchEmployees(page=0,size=1000){
     try {
         const token = localStorage.getItem("jwtToken");
-        const res = await fetch(`http://localhost:8081/api/employee?page=${page}&size=${size}`, {
+        const res = await fetch(`http://192.168.206.1:5500/api/employee?page=${page}&size=${size}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
